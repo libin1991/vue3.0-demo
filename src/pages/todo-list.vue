@@ -29,21 +29,23 @@
     <!-- 双向数据绑定 -->
     <input type="text" v-model="inputVal">
     <p>{{inputVal}}</p>
+    <p>当前鼠标x：{{ x }},y：{{ y }}</p>
 </template>
 <script lang="ts">
  // 在vue2中 data 在vue3中使用 reactive代替
 import { reactive, computed, onMounted, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
+import usePosition from './usePosition'
 export default {
     // setup相当于vue2.0的 beforeCreate和 created，是vue3新增的一个属性，所有的操作都在此属性中完成
     setup(props, context) {
-    console.log('created')
-    onMounted(()=>{
-        console.log('mounted')
-    })
-    onMounted(()=>{
-        console.log('mounted2')
-    })
+        console.log('created')
+        onMounted(()=>{
+            console.log('mounted')
+        })
+        onMounted(()=>{
+            console.log('mounted2')
+        })
     // 通过reactive 可以初始化一个可响应的数据，与Vue2.0中的Vue.observer很相似
     const state = reactive({
         todoList: [
@@ -107,17 +109,18 @@ export default {
         inputVal:111,
         inputVal2:222,
     })
-
+    const {x,y} = usePosition()
 // 在Vue3.0中，所有的数据和方法都通过在setup 中 return 出去，然后在template中使用
     return {
-      state,
-      todos,
-      dones,
-      handleChangeStatus,
-      handleAddTodo,
-      nameVal,
-      handleClickName,
-      ...toRefs(inputValModel) //双向数据绑定
+        state,
+        todos,
+        dones,
+        handleChangeStatus,
+        handleAddTodo,
+        nameVal,
+        handleClickName,
+        ...toRefs(inputValModel), //双向数据绑定
+        ...usePosition()
     }
   }
 }
